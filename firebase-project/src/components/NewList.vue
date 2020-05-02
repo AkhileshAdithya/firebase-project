@@ -11,7 +11,7 @@
                 <input type="text" name="contentdone" v-model="content[index]">
                 <p v-if="contentStatus[index]">
                     <label>
-                        <input type="radio" name="contentl" value="true" v-model="contentStatus[index]">
+                        <input type="radio" name="contentl" value="true" checked v-model="contentStatus[index]">
                         <span>True/Done</span>
                     </label>
                 </p>
@@ -23,7 +23,7 @@
                 </p>
                 <p v-if="!contentStatus[index]">
                     <label>
-                        <input type="radio" name="contentl" value="false" v-model="contentStatus[index]">
+                        <input type="radio" name="contentl" value="false" checked v-model="contentStatus[index]">
                         <span>False/Not Done</span>
                     </label>
                 </p>
@@ -43,20 +43,20 @@
             <div class="field contentStatus">
                 <p>
                     <label>
-                        <input name="checkStatus" type="radio" value="true" v-model="anotherStatus" checked />
+                        <input name="checkStatus" type="radio" value="true" v-model="anotherStatus"  />
                         <span>True/Done</span>
                     </label>
                 </p>
                 <p>
                     <label>
-                        <input name="checkStatus" type="radio" value="false" v-model="anotherStatus" />
+                        <input name="checkStatus" type="radio" value="false" v-model="anotherStatus" checked />
                         <span>False/Not done</span>
                     </label>
                 </p>
             </div>
             <div class="field center-align">
                 <button class="btn orange" @click.prevent="addCont">Add Another Content</button>
-                <button class="btn orange">Save List</button>
+                <button class="btn orange" >Save List</button>
             </div>
         </form>
     </div>    
@@ -81,6 +81,9 @@ export default {
     },
     methods:{
         addCont(){
+            if(this.another == null || this.anotherStatus == null){
+                this.feedback = 'Content or Content status should not be empty'
+            }
             if(this.another != null && this.anotherStatus != null){
                 this.content.push(this.another)
                 this.contentStatus.push(this.anotherStatus)
@@ -90,20 +93,14 @@ export default {
                 this.feedback = 'next'
                 this.anotherStatus = null             
             }
-            if(this.another == null || this.anotherStatus == null){
-                this.feedback = 'Content or Content status should not be empty'
-            }
+            
         },
         AddList(){
-            if(this.title){
+            console.log(this.content, this.contentStatus)
+            if(this.title != null){
                 if(this.another != null && this.anotherStatus != null){
                     this.content.push(this.another)
-                    this.contentStatus.push(this.anotherStatus)
-                    console.log(this.contentStatus)
-                    console.log(this.content)
-                    this.another = null
-                    this.feedback = 'next'
-                    this.anotherStatus = null             
+                    this.contentStatus.push(this.anotherStatus)            
                 }
                 this.feedback = null
                 this.slug = slugify(this.title, {
@@ -123,7 +120,8 @@ export default {
                     console.log(err)
                 })           
                 
-            } else{
+            } 
+            else{
                 this.feedback = 'You must enter a Title'
             }
         }

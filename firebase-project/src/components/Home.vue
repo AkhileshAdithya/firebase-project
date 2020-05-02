@@ -17,8 +17,8 @@
                 <div class="card-content">
                     <ul class="todolist">
                         <li v-for="(cont,index) in todo.content" :key="index">
-                            <span v-if="todo.contentStatus[index]" ><i class="material-icons checkbox">check_box</i></span>
-                            <span v-if="!todo.contentStatus[index]"><i class="material-icons checkbox">check_box_outline_blank</i></span>   
+                            <span v-if="todo.contentStatus[index] == 'true'" ><i class="material-icons checkbox">check_box</i></span>
+                            <span v-if="todo.contentStatus[index] == 'false'"><i class="material-icons checkbox">check_box_outline_blank</i></span>   
                             <span class="checkcont">{{cont}}</span>
                         </li>
                     </ul>
@@ -32,6 +32,16 @@
 const firebase = require("firebase");
 // Required for side-effects
 require("firebase/firestore");
+firebase.initializeApp({
+            apiKey: "AIzaSyCJaOEOVl_b2ttCNbrPxEJR31XSvdtDtAQ",
+            authDomain: "fir-project-d5b71.firebaseapp.com",
+            databaseURL: "https://fir-project-d5b71.firebaseio.com",
+            projectId: "fir-project-d5b71",
+            storageBucket: "fir-project-d5b71.appspot.com",
+            messagingSenderId: "592336125625",
+            appId: "1:592336125625:web:a63f7940e3b93cbc5de568",
+            measurementId: "G-16NYB9RCK2"
+        });
 export default {
     name:'Home',
     methods:{
@@ -56,20 +66,11 @@ export default {
     data(){
         return{
             notes: [],
-            todos: []
+            todos: [],
+            flag1: false
         }
     },
     created(){
-        firebase.initializeApp({
-            apiKey: "AIzaSyCJaOEOVl_b2ttCNbrPxEJR31XSvdtDtAQ",
-            authDomain: "fir-project-d5b71.firebaseapp.com",
-            databaseURL: "https://fir-project-d5b71.firebaseio.com",
-            projectId: "fir-project-d5b71",
-            storageBucket: "fir-project-d5b71.appspot.com",
-            messagingSenderId: "592336125625",
-            appId: "1:592336125625:web:a63f7940e3b93cbc5de568",
-            measurementId: "G-16NYB9RCK2"
-        });
         var db1 = firebase.firestore()
         db1.collection('notes').get().then(Snapshot => {
             Snapshot.forEach(doc => {
